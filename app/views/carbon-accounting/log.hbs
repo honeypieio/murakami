@@ -155,10 +155,26 @@ function update(){
 		weight_total += +transaction[i].weight;
 		$('<tr>',{
 		    html:"<td>" + transaction[i].category + "</td>" +
-		    "<td id='weight_" + i + "' contenteditable='true' oninput='updateTrans(" + i + ")' onblur='updateTrans(" + i + ")'>" + transaction[i].weight + "</td>" +
+		    "<td id='weight_" + i + "' oninput='updateTrans(" + i + ")' onblur='updateTrans(" + i + ")'>" + "</td>" +
 		    "<td class='remove-item clickable' onclick='removeFromTrans(" + i + ")'>x</td>"
 		}).appendTo('#transaction-info');
+	
+
+		let logWeightInput = document.createElement("input")
+		logWeightInput.className = "form-control align-middle removeArrows"
+		logWeightInput.id = "inputLogWeight_" + i
+		logWeightInput.style = `width:80px`;
+		logWeightInput.value = transaction[i].weight
+		$("#weight_" + i).append(logWeightInput)
+		logWeightInput.oninput = function(){
+			updateTrans(i)
+		};
+		logWeightInput.onblur = function(){
+			updateTrans(i)
+		};
 	}
+
+
 
 	if(transaction.length > 0){
 		$('<tr>',{
@@ -181,11 +197,39 @@ function isNumeric(n) {
 
 function updateTrans(index){
 
-	if(isNumeric($("#weight_" + index).html())){
-		transaction[index].weight = $("#weight_" + index).html();
-	} else {
-		$("#weight_" + index).html("");
-		transaction[index].weight = 0;
+	if ($("#inputLogWeight_" + index).val().length == 0)
+	{
+		newWeightStr = 0
+		transaction[index].weight = 0
+	}
+	else
+	{
+		weightHasDot = false; 
+		newWeightStr = ""
+		for (i = 0; i < $("#inputLogWeight_" + index).val().length; i++)
+		{
+			if (isNumeric($("#inputLogWeight_" + index).val()[i]))
+			{
+				newWeightStr += $("#inputLogWeight_" + index).val()[i]
+				transaction[index].weight = parseFloat(newWeightStr)
+
+			}
+			else if ($("#inputLogWeight_" + index).val()[i] == ".")
+			{
+				if (weightHasDot == false)
+				{
+					weightHasDot = true;
+					newWeightStr += "."
+					transaction[index].weight = parseFloat(newWeightStr)
+				}
+			}
+			else 
+			{
+				$("#inputLogWeight_" + index).val("")	
+				newWeightStr += ""
+			}
+		}
+		$("#inputLogWeight_" + index).val(newWeightStr)
 	}
 
 	if(transaction.length > 0){
@@ -218,7 +262,8 @@ function completeTrans(){
 	            transaction = [];
 	            update();
 	            $("#transaction_info").html('<div class="alert alert-success alert-dismissible fade show col-md-5 p-3 mx-auto">' + response.msg + "<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>");
-	            $("#transaction_history").bootstrapTable('refresh');
+	            //$("#transaction_history").bootstrapTable('refresh');
+				$("#transaction_history").Datatable; // Line above caused error. This line doesn't.
 	        } else {
 	        	$("#transaction_info").html('<div class="alert alert-danger alert-dismissible fade show col-md-5 p-3 mx-auto">' + response.msg + "<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>");
 	        }
