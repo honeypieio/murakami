@@ -24,6 +24,10 @@ router.post(
         throw "Please specify a till";
       }
 
+      if (item_id === "membership") {
+        throw "You cannot move the category 'Membership'";
+      }
+
       if (!item_id) {
         throw "Please specify a category to move";
       }

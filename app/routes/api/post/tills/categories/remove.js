@@ -43,6 +43,10 @@ router.post(
         throw "You don't have permission to update categories on this till";
       }
 
+      if (item_id === "membership") {
+        throw "You cannot remove the category 'Membership'";
+      }
+
       if (!item_id) {
         throw "No item specified";
       }
