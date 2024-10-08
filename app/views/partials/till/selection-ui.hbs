@@ -105,6 +105,7 @@ function updateOptions(path) {
           option.value = 0;
         }
 
+        document.addEventListener("touchstart", function() {},false);
         optionDOMObject.parent.className = "col-xs-5 col-sm-3 item-options itemBtn";
         
         {{#ifCond mode '==' 'manage-stock'}}

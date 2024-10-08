@@ -2359,6 +2359,7 @@ table.dataTable thead td {
   align-items: center;
   justify-content: center;
   overflow-wrap: anywhere;
+  transition-delay: 0s;
 }
 
 .option-disabled {
@@ -2373,8 +2374,16 @@ table.dataTable thead td {
   vertical-align: middle;
 }
 
+.item-options:active {
+  background-color: #ef7070;
+}
+
 .discount-options {
   border-top: 5px solid #19ace6;
+}
+
+.discount-options:active {
+  background-color: #70d7ff;
 }
 
 .discount-options:hover {
